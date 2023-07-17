@@ -13,12 +13,15 @@ export default function Home() {
 
   const user = useUser();
 
+  //const { data } = api.example.getAll.useQuery();
+
   return (
     <>
       <Head>
         <title>T3 App Test</title>
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <div> Test</div>
         {!user.isSignedIn && <SignInButton />}
         {!user.isSignedIn && <SignUpButton />}
         {user.isSignedIn && <SignOutButton />}
