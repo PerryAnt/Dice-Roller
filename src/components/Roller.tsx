@@ -11,19 +11,19 @@ function Roller() {
   const [resultText, setResultText] = useState("");
 
   function updateDiceList(value: number, index: number) {
-    let newDiceList = [...diceList];
+    const newDiceList = [...diceList];
     newDiceList[index] = value;
     setDiceList(newDiceList);
   }
 
   function updateSidesList(value: number, index: number) {
-    let newSidesList = [...sidesList];
+    const newSidesList = [...sidesList];
     newSidesList[index] = value;
     setSidesList(newSidesList);
   }
 
   function rollDice() {
-    let results = [];
+    const results = [];
     let roll = 0;
     let sum = 0;
 
