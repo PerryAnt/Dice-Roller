@@ -35,7 +35,7 @@ function Roller() {
       }
     }
 
-    return setResultText(results.join("+") + " = " + sum);
+    return setResultText(results.join("+") + " = " + sum.toString());
   }
 
   return (
