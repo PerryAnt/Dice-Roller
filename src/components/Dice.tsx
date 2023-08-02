@@ -2,33 +2,29 @@ import React, { useState } from "react";
 
 interface Props {
   dice: number;
-  setDice: (value: number, index: number) => void;
+  setDice: (e: React.ChangeEvent<HTMLInputElement>) => void;
   sides: number;
-  setSides: (value: number, index: number) => void;
+  setSides: (e: React.ChangeEvent<HTMLInputElement>) => void;
   groupNumber: number;
+  remove: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 function Dice(props: Props) {
   return (
     <>
       <div className="flex flex-row gap-2">
+        <button onClick={props.remove}>x</button>
         <input
           className="w-10 text-right"
           type="text"
-          onChange={(e) => {
-            if (e.target.value)
-              props.setDice(parseInt(e.target.value), props.groupNumber);
-          }}
+          onChange={props.setDice}
           value={props.dice}
         />
         <div>d</div>
         <input
           className="w-10 place-content-end"
           type="text"
-          onChange={(e) => {
-            if (e.target.value)
-              props.setSides(parseInt(e.target.value), props.groupNumber);
-          }}
+          onChange={props.setSides}
           value={props.sides}
         />
       </div>

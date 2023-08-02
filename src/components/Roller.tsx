@@ -22,6 +22,30 @@ function Roller() {
     setSidesList(newSidesList);
   }
 
+  function addDiceGroup() {
+    setGroupCount((value) => value + 1);
+
+    const newDiceList = [...diceList];
+    newDiceList.push(1);
+    setDiceList(newDiceList);
+
+    const newSidesList = [...sidesList];
+    newSidesList.push(groupCount + 1);
+    setSidesList(newSidesList);
+  }
+
+  function removeDiceGroup(index: number) {
+    setGroupCount((value) => value - 1);
+
+    const newDiceList = [...diceList];
+    newDiceList.splice(index, 1);
+    setDiceList(newDiceList);
+
+    const newSidesList = [...sidesList];
+    newSidesList.splice(index, 1);
+    setSidesList(newSidesList);
+  }
+
   function rollDice() {
     const results = [];
     let roll = 0;
@@ -44,12 +68,21 @@ function Roller() {
         <Dice
           key={index}
           dice={diceList[index] || 0}
-          setDice={updateDiceList}
+          setDice={(e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.value) updateDiceList(parseInt(e.target.value), index);
+          }}
           sides={sidesList[index] || 0}
-          setSides={updateSidesList}
+          setSides={(e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.value)
+              updateSidesList(parseInt(e.target.value), index);
+          }}
           groupNumber={index}
+          remove={(e: React.MouseEvent<HTMLButtonElement>) =>
+            removeDiceGroup(index)
+          }
         ></Dice>
       ))}
+      <button onClick={addDiceGroup}>{groupCount < 10 ? "+" : ""}</button>
 
       <button
         type="button"
@@ -58,6 +91,7 @@ function Roller() {
       >
         Roll
       </button>
+
       <p>{resultText}</p>
     </>
   );
