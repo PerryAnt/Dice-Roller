@@ -1,9 +1,4 @@
-import {
-  SignInButton,
-  SignOutButton,
-  SignUpButton,
-  useUser,
-} from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Link from "next/link";
 import Roller from "~/components/Roller";
@@ -18,8 +13,8 @@ export default function Home() {
         <title>T3 App Test</title>
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
-        {!user.isSignedIn && <SignInButton />}
-        {user.isSignedIn && <SignOutButton />}
+        {/*         {!user.isSignedIn && <SignInButton />}
+        {user.isSignedIn && <SignOutButton />} */}
         <Roller />
       </main>
     </>

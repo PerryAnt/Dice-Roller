@@ -63,7 +63,7 @@ function Roller() {
   }
 
   return (
-    <>
+    <div className="w-1/2 border border-black">
       {diceList.map((value, index) => (
         <Dice
           key={index}
@@ -82,18 +82,21 @@ function Roller() {
           }
         ></Dice>
       ))}
-      <button onClick={addDiceGroup}>{groupCount < 10 ? "+" : ""}</button>
-
-      <button
-        type="button"
-        className="btn btn-blue"
-        onClick={(e) => rollDice()}
-      >
-        Roll
+      <button className="m-2" onClick={addDiceGroup}>
+        {groupCount < 10 ? "+" : ""}
       </button>
 
-      <p>{resultText}</p>
-    </>
+      <div className="flex flex-row justify-between">
+        <div className="m-2">{resultText}</div>
+        <button
+          type="button"
+          className="btn btn-blue m-2"
+          onClick={(e) => rollDice()}
+        >
+          Roll
+        </button>
+      </div>
+    </div>
   );
 }
 
