@@ -103,7 +103,9 @@ function Roller() {
             <div className="flex flex-row justify-between" key={groupIndex}>
               {group.map((value, valueIndex) => (
                 <p className="hover:bg-green-500" key={valueIndex}>
-                  {groupIndex == 0 && valueIndex == 0 ? value : "+" + value}
+                  {groupIndex == 0 && valueIndex == 0
+                    ? value.toString()
+                    : "+" + value.toString()}
                 </p>
               ))}
             </div>
