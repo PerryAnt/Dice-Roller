@@ -51,7 +51,7 @@ function Roller() {
   }
 
   function rollDice() {
-    let results: number[][] = [];
+    const results: number[][] = [];
     let roll = 0;
     let newSum = 0;
 
@@ -110,7 +110,7 @@ function Roller() {
               ))}
             </div>
           ))}
-          <p>{"=" + sum}</p>
+          <p>{"=" + sum.toString()}</p>
         </div>
         <button
           type="button"
