@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Dice from "./Dice";
+import { buildStaticPaths } from "next/dist/build/utils";
 
 function Roller() {
   const [groupCount, setGroupCount] = useState<number>(2);
@@ -8,7 +9,10 @@ function Roller() {
     Array(groupCount).fill(2)
   );
 
-  const [resultText, setResultText] = useState("");
+  const [resultList, setResultList] = useState<number[][]>(
+    Array(groupCount).fill([2, 2])
+  );
+  const [sum, setSum] = useState(0);
 
   function updateDiceList(value: number, index: number) {
     const newDiceList = [...diceList];
@@ -47,19 +51,26 @@ function Roller() {
   }
 
   function rollDice() {
-    const results = [];
+    let results: number[][] = [];
     let roll = 0;
-    let sum = 0;
+    let newSum = 0;
 
     for (let i = 0; i < groupCount; i++) {
-      for (let j = 0; j < diceList[i]!; j++) {
-        roll = 1 + Math.floor(Math.random() * sidesList[i]!);
-        results.push(roll);
-        sum += roll;
+      results[i] = [];
+      if (sidesList[i]! > 1) {
+        for (let j = 0; j < diceList[i]!; j++) {
+          roll = 1 + Math.floor(Math.random() * sidesList[i]!);
+          results[i]!.push(roll);
+          newSum += roll;
+        }
+      } else {
+        results[i]!.push(diceList[i]!);
+        newSum += diceList[i]!;
       }
     }
 
-    return setResultText(results.join("+") + " = " + sum.toString());
+    setResultList(results);
+    setSum(newSum);
   }
 
   return (
@@ -87,7 +98,18 @@ function Roller() {
       </button>
 
       <div className="flex flex-row justify-between">
-        <div className="m-2">{resultText}</div>
+        <div className="m-2 flex flex-row justify-between">
+          {resultList.map((group, groupIndex) => (
+            <div className="flex flex-row justify-between" key={groupIndex}>
+              {group.map((value, valueIndex) => (
+                <p className="hover:bg-green-500" key={valueIndex}>
+                  {groupIndex == 0 && valueIndex == 0 ? value : "+" + value}
+                </p>
+              ))}
+            </div>
+          ))}
+          <p>{"=" + sum}</p>
+        </div>
         <button
           type="button"
           className="btn btn-blue m-2"
