@@ -8,6 +8,10 @@ function Roller() {
   const [sidesList, setSidesList] = useState<number[]>(
     Array(groupCount).fill(2)
   );
+  const [optionList, setOptionList] = useState<string[]>(
+    Array(groupCount).fill("")
+  );
+  const [xList, setXList] = useState<number[]>(Array(groupCount).fill(0));
   const [hover, setHover] = useState<number>(-1);
 
   const [resultList, setResultList] = useState<number[][]>(
@@ -27,6 +31,18 @@ function Roller() {
     setSidesList(newSidesList);
   }
 
+  function updateOptionList(value: string, index: number) {
+    const newOptionList = [...optionList];
+    newOptionList[index] = value;
+    setOptionList(newOptionList);
+  }
+
+  function updateXList(value: number, index: number) {
+    const newXList = [...xList];
+    newXList[index] = value;
+    setXList(newXList);
+  }
+
   function addDiceGroup() {
     setGroupCount((value) => value + 1);
 
@@ -37,6 +53,10 @@ function Roller() {
     const newSidesList = [...sidesList];
     newSidesList.push(groupCount + 1);
     setSidesList(newSidesList);
+
+    const newOptionList = [...optionList];
+    newOptionList.push("none");
+    setOptionList(newOptionList);
   }
 
   function removeDiceGroup(index: number) {
@@ -49,29 +69,75 @@ function Roller() {
     const newSidesList = [...sidesList];
     newSidesList.splice(index, 1);
     setSidesList(newSidesList);
+
+    const newOptionList = [...optionList];
+    newOptionList.splice(index, 1);
+    setOptionList(newOptionList);
   }
 
   function rollDice() {
     const results: number[][] = [];
+    let groupResult: number[];
+
+    let sides = 0;
+    let rollsRemaining = 0;
+
     let roll = 0;
-    let newSum = 0;
+    let sum = 0;
 
     for (let i = 0; i < groupCount; i++) {
-      results[i] = [];
-      if (sidesList[i]! > 1) {
-        for (let j = 0; j < diceList[i]!; j++) {
-          roll = 1 + Math.floor(Math.random() * sidesList[i]!);
-          results[i]!.push(roll);
-          newSum += roll;
+      sides = sidesList[i]!;
+      groupResult = [];
+      rollsRemaining = diceList[i]!;
+      if (sides > 1) {
+        for (
+          rollsRemaining = diceList[i]!;
+          rollsRemaining > 0;
+          rollsRemaining--
+        ) {
+          roll = 1 + Math.floor(Math.random() * sides);
+          groupResult.push(roll);
+          if (roll == sides && optionList[i]! == "rerollMax") rollsRemaining++;
         }
       } else {
-        results[i]!.push(diceList[i]!);
-        newSum += diceList[i]!;
+        groupResult = [diceList[i]!];
       }
+
+      console.log(groupResult);
+      groupResult.sort(compareNumbers);
+      groupResult = applyOption(groupResult, optionList[i]!, xList[i]!);
+
+      sum += groupResult.reduce((a, b) => a + b, 0);
+      results.push(groupResult);
+    }
+    setResultList(results);
+    setSum(sum);
+  }
+
+  function applyOption(rawResult: number[], option: string, x: number) {
+    let result: number[] = [];
+
+    switch (option) {
+      case "none":
+        result = [...rawResult];
+        break;
+      case "keepTopX":
+        result = rawResult.slice(-x);
+        break;
+      case "keepBottomX":
+        result = rawResult.slice(0, x);
+        break;
+      case "discardTopX":
+        result = rawResult.slice(0, -x);
+        break;
+      case "discardBottomX":
+        result = rawResult.slice(x);
+        break;
+      default:
+        result = [...rawResult];
     }
 
-    setResultList(results);
-    setSum(newSum);
+    return result;
   }
 
   return (
@@ -79,6 +145,7 @@ function Roller() {
       {diceList.map((value, index) => (
         <Dice
           key={index}
+          groupNumber={index}
           dice={diceList[index] || 0}
           setDice={(e: React.ChangeEvent<HTMLInputElement>) => {
             if (e.target.value) updateDiceList(parseInt(e.target.value), index);
@@ -88,10 +155,17 @@ function Roller() {
             if (e.target.value)
               updateSidesList(parseInt(e.target.value), index);
           }}
-          groupNumber={index}
           remove={(e: React.MouseEvent<HTMLButtonElement>) =>
             removeDiceGroup(index)
           }
+          option={optionList[index] || "none"}
+          setOption={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            updateOptionList(e.target.value, index)
+          }
+          x={xList[index] || 0}
+          setX={(e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.value) updateXList(parseInt(e.target.value), index);
+          }}
           hover={index == hover}
         ></Dice>
       ))}
@@ -103,13 +177,16 @@ function Roller() {
         <div className="m-2 flex flex-row justify-between">
           {resultList.map((group, groupIndex) => (
             <div
-              onMouseEnter={() => setHover(groupIndex)}
-              onMouseLeave={() => setHover(-1)}
-              className="flex flex-row justify-between hover:bg-green-200"
+              //onMouseEnter={() => setHover(groupIndex)}
+              //onMouseLeave={() => setHover(-1)}
+              className="flex flex-row justify-between" // hover:bg-green-200"
               key={groupIndex}
             >
               {group.map((value, valueIndex) => (
-                <p className="hover:bg-green-500" key={valueIndex}>
+                <p
+                  className="" //"hover:bg-green-500"
+                  key={valueIndex}
+                >
                   {groupIndex == 0 && valueIndex == 0
                     ? value.toString()
                     : "+" + value.toString()}
@@ -129,6 +206,10 @@ function Roller() {
       </div>
     </div>
   );
+}
+
+function compareNumbers(a: number, b: number) {
+  return a - b;
 }
 
 export default Roller;
