@@ -103,7 +103,7 @@ function Roller() {
         groupResult = [diceList[i]!];
       }
 
-      console.log(groupResult);
+      //console.log(groupResult);
       groupResult.sort(compareNumbers);
       groupResult = applyOption(groupResult, optionList[i]!, xList[i]!);
 
