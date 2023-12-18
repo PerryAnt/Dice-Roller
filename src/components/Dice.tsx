@@ -1,21 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Dicegroup } from "./typeDefs";
 
 interface Props {
-  groupNumber: number;
-  dice: number;
-  setDice: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  sides: number;
-  setSides: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  state: Dicegroup;
   remove: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  option: string;
-  setOption: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  x: number;
-  setX: (e: React.ChangeEvent<HTMLInputElement>) => void;
   hover: boolean;
+  setState: (value: Dicegroup) => void;
 }
 
 function Dice(props: Props) {
   const background = props.hover ? "bg-green-500" : "";
+
+  function handleDiceChange(newDice: string) {
+    const value = parseInt(newDice);
+    const newState = { ...props.state };
+
+    if (value > 0) {
+      newState.dice = value;
+      newState.isPositive = true;
+    } else {
+      newState.dice = -value;
+      newState.isPositive = false;
+    }
+
+    props.setState(newState);
+  }
+
+  function handleSidesChange(newSides: string) {
+    const value = parseInt(newSides);
+    const newState = { ...props.state };
+    if (value >= 0) newState.sides = value;
+    props.setState(newState);
+  }
+
+  function handleOptionChange(newOption: string) {
+    const newState = { ...props.state };
+    newState.option = newOption;
+    props.setState(newState);
+  }
+
+  function handleXChange(newX: string) {
+    const value = parseInt(newX);
+    const newState = { ...props.state };
+    if (value >= 0) newState.X = value;
+    props.setState(newState);
+  }
+
   return (
     <div className={"flex flex-row gap-2  " + background}>
       <button className="m-2" onClick={props.remove}>
@@ -25,21 +55,21 @@ function Dice(props: Props) {
       <input
         className={"w-10 text-right " + background}
         type="text"
-        onChange={props.setDice}
-        value={props.dice}
+        onChange={(e) => handleDiceChange(e.target.value)}
+        value={props.state.isPositive ? props.state.dice : -props.state.dice}
       />
       <div className="m-2">d</div>
       <input
         className={"w-10 place-content-end " + background}
         type="text"
-        onChange={props.setSides}
-        value={props.sides}
+        onChange={(e) => handleSidesChange(e.target.value)}
+        value={props.state.sides}
       />
       <select
         name="option"
         id="option"
-        onChange={props.setOption}
-        value={props.option}
+        onChange={(e) => handleOptionChange(e.target.value)}
+        value={props.state.option}
       >
         <option value="none"></option>
         <option value="keepTopX">Keep Highest X Values</option>
@@ -52,8 +82,8 @@ function Dice(props: Props) {
       <input
         className={"w-10 place-content-end " + background}
         type="text"
-        onChange={props.setX}
-        value={props.x}
+        onChange={(e) => handleXChange(e.target.value)}
+        value={props.state.X}
       />
     </div>
   );

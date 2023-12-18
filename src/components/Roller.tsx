@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import Dice from "./Dice";
+import { Dicegroup } from "./typeDefs";
 import { buildStaticPaths } from "next/dist/build/utils";
 
 function Roller() {
   const [groupCount, setGroupCount] = useState<number>(2);
-  const [diceList, setDiceList] = useState<number[]>(Array(groupCount).fill(1));
-  const [sidesList, setSidesList] = useState<number[]>(
-    Array(groupCount).fill(2)
+
+  const [groupList, setGroupList] = useState<Dicegroup[]>(
+    Array(groupCount).fill(dummyFunction())
   );
-  const [optionList, setOptionList] = useState<string[]>(
-    Array(groupCount).fill("")
-  );
-  const [xList, setXList] = useState<number[]>(Array(groupCount).fill(0));
+
   const [hover, setHover] = useState<number>(-1);
 
   const [resultList, setResultList] = useState<number[][]>(
@@ -19,60 +17,40 @@ function Roller() {
   );
   const [sum, setSum] = useState(0);
 
-  function updateDiceList(value: number, index: number) {
-    const newDiceList = [...diceList];
-    newDiceList[index] = value;
-    setDiceList(newDiceList);
+  function dummyFunction(): Dicegroup {
+    return {
+      dice: 1,
+      sides: 2,
+      option: "none",
+      X: 0,
+      isPositive: true,
+    };
   }
 
-  function updateSidesList(value: number, index: number) {
-    const newSidesList = [...sidesList];
-    newSidesList[index] = value;
-    setSidesList(newSidesList);
-  }
-
-  function updateOptionList(value: string, index: number) {
-    const newOptionList = [...optionList];
-    newOptionList[index] = value;
-    setOptionList(newOptionList);
-  }
-
-  function updateXList(value: number, index: number) {
-    const newXList = [...xList];
-    newXList[index] = value;
-    setXList(newXList);
+  function handleStateChange(index: number) {
+    return (value: Dicegroup) => {
+      console.log(value);
+      console.log(index);
+      const newGroupList = [...groupList];
+      newGroupList[index] = { ...value };
+      setGroupList(newGroupList);
+    };
   }
 
   function addDiceGroup() {
     setGroupCount((value) => value + 1);
 
-    const newDiceList = [...diceList];
-    newDiceList.push(1);
-    setDiceList(newDiceList);
-
-    const newSidesList = [...sidesList];
-    newSidesList.push(groupCount + 1);
-    setSidesList(newSidesList);
-
-    const newOptionList = [...optionList];
-    newOptionList.push("none");
-    setOptionList(newOptionList);
+    const newGroupList = [...groupList];
+    newGroupList.push(dummyFunction());
+    setGroupList(newGroupList);
   }
 
   function removeDiceGroup(index: number) {
     setGroupCount((value) => value - 1);
 
-    const newDiceList = [...diceList];
-    newDiceList.splice(index, 1);
-    setDiceList(newDiceList);
-
-    const newSidesList = [...sidesList];
-    newSidesList.splice(index, 1);
-    setSidesList(newSidesList);
-
-    const newOptionList = [...optionList];
-    newOptionList.splice(index, 1);
-    setOptionList(newOptionList);
+    const newGroupList = [...groupList];
+    newGroupList.splice(index, 1);
+    setGroupList(newGroupList);
   }
 
   function rollDice() {
@@ -84,28 +62,28 @@ function Roller() {
 
     let roll = 0;
     let sum = 0;
+    let groupState: Dicegroup;
 
-    for (let i = 0; i < groupCount; i++) {
-      sides = sidesList[i]!;
+    for (const x of groupList) {
+    }
+
+    for (const x of groupList) {
+      sides = x.sides;
       groupResult = [];
-      rollsRemaining = diceList[i]!;
+      rollsRemaining = x.dice;
       if (sides > 1) {
-        for (
-          rollsRemaining = diceList[i]!;
-          rollsRemaining > 0;
-          rollsRemaining--
-        ) {
+        for (rollsRemaining = x.dice; rollsRemaining > 0; rollsRemaining--) {
           roll = 1 + Math.floor(Math.random() * sides);
           groupResult.push(roll);
-          if (roll == sides && optionList[i]! == "rerollMax") rollsRemaining++;
+          if (roll == sides && x.option == "rerollMax") rollsRemaining++;
         }
       } else {
-        groupResult = [diceList[i]!];
+        groupResult = [x.dice];
       }
 
       //console.log(groupResult);
       groupResult.sort(compareNumbers);
-      groupResult = applyOption(groupResult, optionList[i]!, xList[i]!);
+      groupResult = applyOption(groupResult, x.option!, x.X);
 
       sum += groupResult.reduce((a, b) => a + b, 0);
       results.push(groupResult);
@@ -140,33 +118,23 @@ function Roller() {
     return result;
   }
 
+  function Test() {
+    for (const x of groupList) {
+      //console.log(x());
+    }
+  }
+
   return (
     <div className="w-1/2 border border-black">
-      {diceList.map((value, index) => (
+      {groupList.map((value, index) => (
         <Dice
           key={index}
-          groupNumber={index}
-          dice={diceList[index] || 0}
-          setDice={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.value) updateDiceList(parseInt(e.target.value), index);
-          }}
-          sides={sidesList[index] || 0}
-          setSides={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.value)
-              updateSidesList(parseInt(e.target.value), index);
-          }}
+          state={value}
           remove={(e: React.MouseEvent<HTMLButtonElement>) =>
             removeDiceGroup(index)
           }
-          option={optionList[index] || "none"}
-          setOption={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            updateOptionList(e.target.value, index)
-          }
-          x={xList[index] || 0}
-          setX={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.value) updateXList(parseInt(e.target.value), index);
-          }}
           hover={index == hover}
+          setState={handleStateChange(index)}
         ></Dice>
       ))}
       <button className="m-2" onClick={addDiceGroup}>
@@ -203,6 +171,13 @@ function Roller() {
         >
           Roll
         </button>
+        <button
+          type="button"
+          className="btn btn-blue m-2"
+          onClick={(e) => Test()}
+        >
+          Test
+        </button>
       </div>
     </div>
   );
@@ -213,3 +188,11 @@ function compareNumbers(a: number, b: number) {
 }
 
 export default Roller;
+
+const t = {warseed: 5, seed: 5}
+function g(e:number, a:number, r:number) {
+    return a = a || 1,
+    e = e || 0,
+    t[r ? "warseed" : "seed"] = (9301 * t[r ? "warseed" : "seed"] + 49297) % 233280,
+    e + t[r ? "warseed" : "seed"] / 233280 * (a - e)
+}

@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 
 export default function Home() {
   const user = useUser();
+  //const hello = api.example.getAll.useQuery();
 
   return (
     <>
