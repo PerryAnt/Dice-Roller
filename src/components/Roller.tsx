@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Dice from "./Dice";
-import { Dicegroup } from "./typeDefs";
+import type { Dicegroup } from "./typeDefs";
 import { buildStaticPaths } from "next/dist/build/utils";
 
 function Roller() {
@@ -83,7 +83,7 @@ function Roller() {
 
       //console.log(groupResult);
       groupResult.sort(compareNumbers);
-      groupResult = applyOption(groupResult, x.option!, x.X);
+      groupResult = applyOption(groupResult, x.option, x.X);
 
       sum += groupResult.reduce((a, b) => a + b, 0);
       results.push(groupResult);
@@ -188,11 +188,3 @@ function compareNumbers(a: number, b: number) {
 }
 
 export default Roller;
-
-const t = {warseed: 5, seed: 5}
-function g(e:number, a:number, r:number) {
-    return a = a || 1,
-    e = e || 0,
-    t[r ? "warseed" : "seed"] = (9301 * t[r ? "warseed" : "seed"] + 49297) % 233280,
-    e + t[r ? "warseed" : "seed"] / 233280 * (a - e)
-}
