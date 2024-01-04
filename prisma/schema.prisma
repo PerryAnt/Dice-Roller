@@ -19,3 +19,25 @@ model Post {
 
     @@index([authorId])
 }
+
+model User {
+    userId String @id @default(cuid())
+}
+
+model DiceRoller {
+    rollerId    String @id @default(cuid())
+    userId      String
+    label       String
+    indexInUser Int
+}
+
+model DiceGroup {
+    groupId       String  @id @default(cuid())
+    rollerId      String
+    indexInRoller Int
+    dice          Int
+    sides         Int
+    option        String
+    X             Int
+    isPositive    Boolean
+}
