@@ -4,6 +4,7 @@ import type { Dicegroup } from "./typeDefs";
 import { buildStaticPaths } from "next/dist/build/utils";
 
 function Roller() {
+  const [label, setlabel] = useState<string>("Title");
   const [groupCount, setGroupCount] = useState<number>(2);
 
   const [groupList, setGroupList] = useState<Dicegroup[]>(

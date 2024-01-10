@@ -11,33 +11,31 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Post {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    content   String   @db.VarChar(255)
-    authorId  String
-
-    @@index([authorId])
-}
-
 model User {
-    userId String @id @default(cuid())
+    userId     String       @id
+    DiceRoller DiceRoller[]
 }
 
 model DiceRoller {
-    rollerId    String @id @default(cuid())
+    rollerId    String      @id @default(cuid())
+    user        User        @relation(fields: [userId], references: [userId])
     userId      String
-    label       String
     indexInUser Int
+    label       String
+    DiceGroup   DiceGroup[]
+
+    @@index([userId])
 }
 
 model DiceGroup {
-    groupId       String  @id @default(cuid())
-    rollerId      String
+    roller        DiceRoller @relation(fields: [diceRollerId], references: [rollerId])
+    diceRollerId  String
     indexInRoller Int
     dice          Int
     sides         Int
     option        String
     X             Int
     isPositive    Boolean
+
+    @@unique([diceRollerId, indexInRoller])
 }
