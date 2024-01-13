@@ -14,9 +14,9 @@ function Roller() {
   const [hover, setHover] = useState<number>(-1);
 
   const [resultList, setResultList] = useState<number[][]>(
-    Array(groupCount).fill([2, 2])
+    Array(groupCount).fill([2])
   );
-  const [sum, setSum] = useState(0);
+  const [sum, setSum] = useState(4);
 
   function dummyFunction(): Dicegroup {
     return {
@@ -171,13 +171,6 @@ function Roller() {
           onClick={(e) => rollDice()}
         >
           Roll
-        </button>
-        <button
-          type="button"
-          className="btn btn-blue m-2"
-          onClick={(e) => Test()}
-        >
-          Test
         </button>
       </div>
     </div>

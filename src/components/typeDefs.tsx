@@ -18,5 +18,5 @@ export const zDicegroup = z.object({
 
 export const zRoller = z.object({
   label: z.string(),
-  diceGroups: z.array(zDicegroup),
+  diceGroup: z.array(zDicegroup),
 });
