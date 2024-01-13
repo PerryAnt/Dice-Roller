@@ -66,22 +66,22 @@ function Roller() {
     let groupState: Dicegroup;
 
     for (const x of groupList) {
-    }
-
-    for (const x of groupList) {
       sides = x.sides;
       groupResult = [];
       rollsRemaining = x.dice;
       if (sides > 1) {
         for (rollsRemaining = x.dice; rollsRemaining > 0; rollsRemaining--) {
           roll = 1 + Math.floor(Math.random() * sides);
-          groupResult.push(roll);
           if (roll == sides && x.option == "rerollMax") rollsRemaining++;
+          groupResult.push(roll);
         }
       } else {
         groupResult = [x.dice];
       }
 
+      if (!x.isPositive) {
+        //TODO negate results}
+      }
       //console.log(groupResult);
       groupResult.sort(compareNumbers);
       groupResult = applyOption(groupResult, x.option, x.X);
