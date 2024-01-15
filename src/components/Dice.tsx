@@ -12,7 +12,7 @@ function Dice(props: Props) {
   const background = props.hover ? "bg-green-500" : "";
 
   function handleDiceChange(newDice: string) {
-    let value = parseInt(newDice) || 0;
+    const value = parseInt(newDice) || 0;
     const newState = { ...props.state };
 
     if (value >= 0) {
@@ -27,7 +27,7 @@ function Dice(props: Props) {
   }
 
   function handleSidesChange(newSides: string) {
-    let value = parseInt(newSides);
+    const value = parseInt(newSides);
     const newState = { ...props.state };
 
     if (value >= 0) newState.sides = value;
@@ -41,7 +41,7 @@ function Dice(props: Props) {
   }
 
   function handleXChange(newX: string) {
-    let value = parseInt(newX);
+    const value = parseInt(newX);
     const newState = { ...props.state };
 
     if (value >= 0) newState.X = value;
