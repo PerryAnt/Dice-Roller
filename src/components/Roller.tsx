@@ -13,8 +13,8 @@ function Roller() {
 
   const [hover, setHover] = useState<number>(-1);
 
-  const [resultList, setResultList] = useState<number[][]>(
-    Array(groupCount).fill([2])
+  const [resultList, setResultList] = useState<string[]>(
+    Array(groupCount).fill("+2")
   );
   const [sum, setSum] = useState(4);
 
@@ -30,8 +30,6 @@ function Roller() {
 
   function handleStateChange(index: number) {
     return (value: Dicegroup) => {
-      console.log(value);
-      console.log(index);
       const newGroupList = [...groupList];
       newGroupList[index] = { ...value };
       setGroupList(newGroupList);
@@ -55,7 +53,7 @@ function Roller() {
   }
 
   function rollDice() {
-    const results: number[][] = [];
+    const results: string[] = [];
     let groupResult: number[];
 
     let sides = 0;
@@ -79,15 +77,19 @@ function Roller() {
         groupResult = [x.dice];
       }
 
-      if (!x.isPositive) {
-        //TODO negate results}
-      }
-      //console.log(groupResult);
       groupResult.sort(compareNumbers);
       groupResult = applyOption(groupResult, x.option, x.X);
 
+      if (!x.isPositive) {
+        groupResult = groupResult.map((value) => -value);
+      }
+
       sum += groupResult.reduce((a, b) => a + b, 0);
-      results.push(groupResult);
+      results.push(
+        groupResult
+          .map((value) => (x.isPositive ? "+" : "") + value.toString())
+          .join("")
+      );
     }
     setResultList(results);
     setSum(sum);
@@ -119,12 +121,6 @@ function Roller() {
     return result;
   }
 
-  function Test() {
-    for (const x of groupList) {
-      //console.log(x());
-    }
-  }
-
   return (
     <div className="w-1/2 border border-black">
       {groupList.map((value, index) => (
@@ -145,23 +141,14 @@ function Roller() {
       <div className="flex flex-row justify-between">
         <div className="m-2 flex flex-row justify-between">
           {resultList.map((group, groupIndex) => (
-            <div
+            <p
               //onMouseEnter={() => setHover(groupIndex)}
               //onMouseLeave={() => setHover(-1)}
               className="flex flex-row justify-between" // hover:bg-green-200"
               key={groupIndex}
             >
-              {group.map((value, valueIndex) => (
-                <p
-                  className="" //"hover:bg-green-500"
-                  key={valueIndex}
-                >
-                  {groupIndex == 0 && valueIndex == 0
-                    ? value.toString()
-                    : "+" + value.toString()}
-                </p>
-              ))}
-            </div>
+              {groupIndex == 0 ? group.replace(/^\+/, "") : group}
+            </p>
           ))}
           <p>{"=" + sum.toString()}</p>
         </div>
