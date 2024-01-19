@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import Dice from "./Dice";
-import type { Dicegroup } from "./typeDefs";
+import type { diceGroupType, rollerType } from "./typeDefs";
 import { buildStaticPaths } from "next/dist/build/utils";
 
-function Roller() {
-  const [label, setlabel] = useState<string>("Title");
-  const [groupCount, setGroupCount] = useState<number>(2);
+interface Props {
+  roller: rollerType;
+  handleRollerChange: (value: rollerType) => void;
+}
 
-  const [groupList, setGroupList] = useState<Dicegroup[]>(
-    Array(groupCount).fill(dummyFunction())
-  );
+function Roller(props: Props) {
+  //const [label, setlabel] = useState<string>("Title");
+  //const [groupCount, setGroupCount] = useState<number>(2);
+
+  //   const [groupList, setGroupList] = useState<diceGroupType[]>(
+  //     Array(groupCount).fill(dummyFunction())
+  //   );
+
+  const label = props.roller.label;
+  const groupList = props.roller.diceGroup;
+  const groupCount = groupList.length;
 
   const [hover, setHover] = useState<number>(-1);
 
@@ -18,7 +27,7 @@ function Roller() {
   );
   const [sum, setSum] = useState(4);
 
-  function dummyFunction(): Dicegroup {
+  function dummyFunction(): diceGroupType {
     return {
       dice: 1,
       sides: 2,
@@ -28,28 +37,24 @@ function Roller() {
     };
   }
 
-  function handleStateChange(index: number) {
-    return (value: Dicegroup) => {
-      const newGroupList = [...groupList];
-      newGroupList[index] = { ...value };
-      setGroupList(newGroupList);
+  function handleGroupChange(index: number) {
+    return (value: diceGroupType) => {
+      const newRoller = { ...props.roller };
+      newRoller.diceGroup[index] = { ...value };
+      props.handleRollerChange(newRoller);
     };
   }
 
   function addDiceGroup() {
-    setGroupCount((value) => value + 1);
-
-    const newGroupList = [...groupList];
-    newGroupList.push(dummyFunction());
-    setGroupList(newGroupList);
+    const newRoller = { ...props.roller };
+    newRoller.diceGroup.push(dummyFunction());
+    props.handleRollerChange(newRoller);
   }
 
   function removeDiceGroup(index: number) {
-    setGroupCount((value) => value - 1);
-
-    const newGroupList = [...groupList];
-    newGroupList.splice(index, 1);
-    setGroupList(newGroupList);
+    const newRoller = { ...props.roller };
+    newRoller.diceGroup.splice(index, 1);
+    props.handleRollerChange(newRoller);
   }
 
   function rollDice() {
@@ -61,7 +66,7 @@ function Roller() {
 
     let roll = 0;
     let sum = 0;
-    let groupState: Dicegroup;
+    let groupState: diceGroupType;
 
     for (const x of groupList) {
       sides = x.sides;
@@ -131,7 +136,7 @@ function Roller() {
             removeDiceGroup(index)
           }
           hover={index == hover}
-          setState={handleStateChange(index)}
+          setState={handleGroupChange(index)}
         ></Dice>
       ))}
       <button className="m-2" onClick={addDiceGroup}>

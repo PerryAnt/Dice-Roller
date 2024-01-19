@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Dicegroup } from "./typeDefs";
+import { diceGroupType } from "./typeDefs";
 
 interface Props {
-  state: Dicegroup;
+  state: diceGroupType;
   remove: (e: React.MouseEvent<HTMLButtonElement>) => void;
   hover: boolean;
-  setState: (value: Dicegroup) => void;
+  setState: (value: diceGroupType) => void;
 }
 
 function Dice(props: Props) {

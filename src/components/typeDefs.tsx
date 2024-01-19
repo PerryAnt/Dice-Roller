@@ -1,11 +1,16 @@
 import { z } from "zod";
 
-export type Dicegroup = {
+export type diceGroupType = {
   dice: number;
   sides: number;
   option: string;
   X: number;
   isPositive: boolean;
+};
+
+export type rollerType = {
+  label: string;
+  diceGroup: diceGroupType[];
 };
 
 export const zDicegroup = z.object({
