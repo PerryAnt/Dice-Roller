@@ -49,7 +49,7 @@ export default function Home() {
 
   function dummyRoller(): rollerType {
     return {
-      label: "default",
+      label: "Attack with sword",
       diceGroup: [dummyDiceGroup(1, 20), dummyDiceGroup(1, 4)],
     };
   }
@@ -75,7 +75,6 @@ export default function Home() {
             >
               X
             </button>
-            <br></br>
             <Roller
               roller={value}
               handleRollerChange={handleRollerChange(index)}

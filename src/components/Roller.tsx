@@ -37,6 +37,11 @@ function Roller(props: Props) {
     };
   }
 
+  function handleLabelChange(value: string) {
+    const newRoller = { ...props.roller, label: value };
+    props.handleRollerChange(newRoller);
+  }
+
   function handleGroupChange(index: number) {
     return (value: diceGroupType) => {
       const newRoller = { ...props.roller };
@@ -126,7 +131,12 @@ function Roller(props: Props) {
   }
 
   return (
-    <div>
+    <div className="m-2">
+      <input
+        type="text"
+        onChange={(e) => handleLabelChange(e.target.value)}
+        value={props.roller.label}
+      />
       {groupList.map((value, index) => (
         <Dice
           key={index}
