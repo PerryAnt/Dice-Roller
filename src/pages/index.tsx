@@ -25,12 +25,24 @@ export default function Home() {
     };
   }
 
+  function addRoller() {
+    const newRollerList = [...rollerList];
+    newRollerList.push(dummyRoller());
+    setRollerList(newRollerList);
+  }
+
+  function removeRoller(index: number) {
+    const newRollerList = [...rollerList];
+    newRollerList.splice(index, 1);
+    setRollerList(newRollerList);
+  }
+
   function dummyDiceGroup(dice: number, sides: number): diceGroupType {
     return {
       dice: dice,
       sides: sides,
       option: "none",
-      X: 0,
+      X: 1,
       isPositive: true,
     };
   }
@@ -47,16 +59,34 @@ export default function Home() {
       <Head>
         <title>Perry&apos;s Dice Roller</title>
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center">
-        {!user.isSignedIn && <SignInButton />}
-        {user.isSignedIn && <SignOutButton />}
+      <main className="flex min-h-screen flex-col items-center justify-center gap-2">
+        <div className="absolute right-0 top-0">
+          {!user.isSignedIn && <SignInButton />}
+          {user.isSignedIn && <SignOutButton />}
+        </div>
         {rollerList.map((value, index) => (
-          <Roller
+          <div
             key={index}
-            roller={value}
-            handleRollerChange={handleRollerChange(index)}
-          ></Roller>
+            className="relative justify-between border border-black"
+          >
+            <button
+              className="absolute right-0 top-0 m-2"
+              onClick={(e) => removeRoller(index)}
+            >
+              X
+            </button>
+            <br></br>
+            <Roller
+              roller={value}
+              handleRollerChange={handleRollerChange(index)}
+            ></Roller>
+          </div>
         ))}
+        {rollerList.length < 10 && (
+          <button className="m-2" onClick={addRoller}>
+            +
+          </button>
+        )}
       </main>
     </>
   );

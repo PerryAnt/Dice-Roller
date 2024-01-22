@@ -32,7 +32,7 @@ function Roller(props: Props) {
       dice: 1,
       sides: 2,
       option: "none",
-      X: 0,
+      X: 1,
       isPositive: true,
     };
   }
@@ -66,7 +66,6 @@ function Roller(props: Props) {
 
     let roll = 0;
     let sum = 0;
-    let groupState: diceGroupType;
 
     for (const x of groupList) {
       sides = x.sides;
@@ -127,7 +126,7 @@ function Roller(props: Props) {
   }
 
   return (
-    <div className="w-1/2 border border-black">
+    <div>
       {groupList.map((value, index) => (
         <Dice
           key={index}
@@ -139,9 +138,11 @@ function Roller(props: Props) {
           setState={handleGroupChange(index)}
         ></Dice>
       ))}
-      <button className="m-2" onClick={addDiceGroup}>
-        {groupCount < 10 ? "+" : ""}
-      </button>
+      {groupCount < 10 && (
+        <button className="m-2" onClick={addDiceGroup}>
+          +
+        </button>
+      )}
 
       <div className="flex flex-row justify-between">
         <div className="m-2 flex flex-row justify-between">
