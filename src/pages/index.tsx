@@ -3,7 +3,7 @@ import { DiceRoller } from "@prisma/client";
 import { ApiError } from "next/dist/server/api-utils";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Roller from "~/components/Roller";
 import type { diceGroupType, rollerType } from "~/components/typeDefs";
 import { api } from "~/utils/api";
@@ -14,14 +14,38 @@ export default function Home() {
   const ctx = api.useContext();
 
   const [rollerList, setRollerList] = useState<rollerType[]>([dummyRoller()]);
+  const [haveRollersChanged, setHaveRollersChanged] = useState<boolean>(false);
 
-  const users = api.example.loadUserData.useQuery();
+  const { data: rollers, refetch } = api.example.loadUserData.useQuery(
+    undefined,
+    {
+      enabled: false,
+    }
+  );
+
+  const { mutate: saveData } = api.example.saveUserData.useMutation();
+
+  function saveToDatabase() {
+    if (!haveRollersChanged) return;
+
+    saveData(rollerList);
+    setHaveRollersChanged(false);
+  }
+
+  async function loadFromDatabase() {
+    if (!haveRollersChanged) return;
+
+    const newRollers = (await refetch()).data;
+    if (newRollers) setRollerList(newRollers);
+    setHaveRollersChanged(false);
+  }
 
   function handleRollerChange(rollerIndex: number) {
     return (value: rollerType) => {
       const newRollerList = [...rollerList];
       newRollerList[rollerIndex] = { ...value };
       setRollerList(newRollerList);
+      setHaveRollersChanged(true);
     };
   }
 
@@ -29,12 +53,14 @@ export default function Home() {
     const newRollerList = [...rollerList];
     newRollerList.push(dummyRoller());
     setRollerList(newRollerList);
+    setHaveRollersChanged(true);
   }
 
   function removeRoller(index: number) {
     const newRollerList = [...rollerList];
     newRollerList.splice(index, 1);
     setRollerList(newRollerList);
+    setHaveRollersChanged(true);
   }
 
   function dummyDiceGroup(dice: number, sides: number): diceGroupType {
@@ -63,6 +89,14 @@ export default function Home() {
         <div className="absolute right-0 top-0">
           {!user.isSignedIn && <SignInButton />}
           {user.isSignedIn && <SignOutButton />}
+          <br></br>
+          <button className="" onClick={(e) => loadFromDatabase()}>
+            Load
+          </button>
+          <br></br>
+          <button className="" onClick={(e) => saveToDatabase()}>
+            Save
+          </button>
         </div>
         {rollerList.map((value, index) => (
           <div
