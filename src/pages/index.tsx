@@ -90,7 +90,12 @@ export default function Home() {
           {!user.isSignedIn && <SignInButton />}
           {user.isSignedIn && <SignOutButton />}
           <br></br>
-          <button className="" onClick={(e) => loadFromDatabase()}>
+          <button
+            className=""
+            onClick={(e) => {
+              async () => await loadFromDatabase();
+            }}
+          >
             Load
           </button>
           <br></br>
