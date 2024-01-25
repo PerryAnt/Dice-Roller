@@ -90,7 +90,9 @@ export default function Home() {
           <button
             className=""
             onClick={(e) => {
-              loadFromDatabase();
+              loadFromDatabase().catch(() => {
+                console.log("load failed");
+              });
             }}
           >
             Load
