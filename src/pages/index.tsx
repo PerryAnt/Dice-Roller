@@ -10,8 +10,6 @@ import { api } from "~/utils/api";
 export default function Home() {
   const user = useUser();
 
-  const ctx = api.useContext();
-
   const [rollerList, setRollerList] = useState<rollerType[]>([dummyRoller()]);
   const [haveRollersChanged, setHaveRollersChanged] = useState<boolean>(false);
 
@@ -32,9 +30,7 @@ export default function Home() {
   }
 
   async function loadFromDatabase() {
-    console.log("in load");
     if (!haveRollersChanged) return;
-    console.log("loading");
     const newRollers = (await refetch()).data;
     if (newRollers) setRollerList(newRollers);
     setHaveRollersChanged(false);
@@ -93,8 +89,8 @@ export default function Home() {
           <br></br>
           <button
             className=""
-            onClick={async (e) => {
-              await loadFromDatabase();
+            onClick={(e) => {
+              loadFromDatabase();
             }}
           >
             Load
