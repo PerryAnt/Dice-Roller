@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Dice from "./Dice";
 import type { diceGroupType, rollerType } from "./typeDefs";
-import { buildStaticPaths } from "next/dist/build/utils";
 
 interface Props {
   roller: rollerType;
@@ -9,19 +8,12 @@ interface Props {
 }
 
 function Roller(props: Props) {
-  //const [label, setlabel] = useState<string>("Title");
-  //const [groupCount, setGroupCount] = useState<number>(2);
-
-  //   const [groupList, setGroupList] = useState<diceGroupType[]>(
-  //     Array(groupCount).fill(dummyFunction())
-  //   );
-
-  const label = props.roller.label;
   const groupList = props.roller.diceGroup;
   const groupCount = groupList.length;
 
   const [hover, setHover] = useState<number>(-1);
 
+  const [crit, setCrit] = useState<boolean>(false);
   const [resultList, setResultList] = useState<string[]>(
     Array(groupCount).fill("+2")
   );
@@ -34,12 +26,17 @@ function Roller(props: Props) {
       option: "none",
       X: 1,
       isPositive: true,
+      doubleOnCrit: false,
     };
   }
 
   function handleLabelChange(value: string) {
     const newRoller = { ...props.roller, label: value };
     props.handleRollerChange(newRoller);
+  }
+
+  function handleCritChange() {
+    setCrit(!crit);
   }
 
   function handleGroupChange(index: number) {
@@ -76,8 +73,9 @@ function Roller(props: Props) {
       sides = x.sides;
       groupResult = [];
       rollsRemaining = x.dice;
+      if (crit && x.doubleOnCrit) rollsRemaining *= 2;
       if (sides > 1) {
-        for (rollsRemaining = x.dice; rollsRemaining > 0; rollsRemaining--) {
+        for (; rollsRemaining > 0; rollsRemaining--) {
           roll = 1 + Math.floor(Math.random() * sides);
           if (roll == sides && x.option == "rerollMax") rollsRemaining++;
           groupResult.push(roll);
@@ -168,13 +166,24 @@ function Roller(props: Props) {
           ))}
           <p>{"=" + sum.toString()}</p>
         </div>
-        <button
-          type="button"
-          className="btn btn-blue m-2"
-          onClick={(e) => rollDice()}
-        >
-          Roll
-        </button>
+        <div>
+          <label className="m-2">
+            <input
+              className="m-2"
+              type="checkbox"
+              checked={crit}
+              onChange={handleCritChange}
+            />
+            Crit
+          </label>
+          <button
+            type="button"
+            className="btn btn-blue m-2"
+            onClick={(e) => rollDice()}
+          >
+            Roll
+          </button>
+        </div>
       </div>
     </div>
   );

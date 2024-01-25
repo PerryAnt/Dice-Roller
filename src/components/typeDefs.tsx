@@ -6,6 +6,7 @@ export type diceGroupType = {
   option: string;
   X: number;
   isPositive: boolean;
+  doubleOnCrit: boolean;
 };
 
 export type rollerType = {
@@ -19,6 +20,7 @@ export const zDicegroup = z.object({
   option: z.string(),
   X: z.number(),
   isPositive: z.boolean(),
+  doubleOnCrit: z.boolean(),
 });
 
 export const zRoller = z.object({

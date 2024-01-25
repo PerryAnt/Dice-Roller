@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { diceGroupType } from "./typeDefs";
+import type { diceGroupType } from "./typeDefs";
 
 interface Props {
   state: diceGroupType;
@@ -48,8 +47,14 @@ function Dice(props: Props) {
     props.setState(newState);
   }
 
+  function handleCritChange() {
+    const newState = { ...props.state };
+    newState.doubleOnCrit = !props.state.doubleOnCrit;
+    props.setState(newState);
+  }
+
   return (
-    <div className={"flex flex-row gap-2  " + background}>
+    <div className={"flex flex-row items-center gap-2 " + background}>
       <button className="m-2" onClick={props.remove}>
         x
       </button>
@@ -62,7 +67,7 @@ function Dice(props: Props) {
       />
       <div className="m-2">d</div>
       <input
-        className={"w-10 place-content-end " + background}
+        className={"w-10" + background}
         type="text"
         onChange={(e) => handleSidesChange(e.target.value)}
         value={props.state.sides}
@@ -82,11 +87,20 @@ function Dice(props: Props) {
       </select>
       <div className="m-2">X =</div>
       <input
-        className={"w-10 place-content-end " + background}
+        className={"w-10 " + background}
         type="text"
         onChange={(e) => handleXChange(e.target.value)}
         value={props.state.X}
       />
+      <label className="m-2">
+        <input
+          className="m-2"
+          type="checkbox"
+          checked={props.state.doubleOnCrit}
+          onChange={handleCritChange}
+        />
+        Double on Crit
+      </label>
     </div>
   );
 }

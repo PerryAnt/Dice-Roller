@@ -1,9 +1,8 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
-import { DiceRoller } from "@prisma/client";
 import { ApiError } from "next/dist/server/api-utils";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Roller from "~/components/Roller";
 import type { diceGroupType, rollerType } from "~/components/typeDefs";
 import { api } from "~/utils/api";
@@ -33,8 +32,9 @@ export default function Home() {
   }
 
   async function loadFromDatabase() {
+    console.log("in load");
     if (!haveRollersChanged) return;
-
+    console.log("loading");
     const newRollers = (await refetch()).data;
     if (newRollers) setRollerList(newRollers);
     setHaveRollersChanged(false);
@@ -70,6 +70,7 @@ export default function Home() {
       option: "none",
       X: 1,
       isPositive: true,
+      doubleOnCrit: false,
     };
   }
 
@@ -92,8 +93,8 @@ export default function Home() {
           <br></br>
           <button
             className=""
-            onClick={(e) => {
-              async () => await loadFromDatabase();
+            onClick={async (e) => {
+              await loadFromDatabase();
             }}
           >
             Load

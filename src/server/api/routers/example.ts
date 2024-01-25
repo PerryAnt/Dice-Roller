@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure, privateProcedure } from "~/server/api/trpc";
-import { diceGroupType, rollerType, zDicegroup, zRoller } from "src/components/typeDefs"
+import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
+import { diceGroupType, rollerType, zRoller } from "src/components/typeDefs"
 
 export const exampleRouter = createTRPCRouter({
     saveUserData: privateProcedure.input(z.array(zRoller)).mutation(async ({ctx, input }) => {

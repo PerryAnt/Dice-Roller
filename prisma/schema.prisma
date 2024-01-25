@@ -36,6 +36,7 @@ model DiceGroup {
     option        String
     X             Int
     isPositive    Boolean
+    doubleOnCrit  Boolean    @default(false)
 
     @@unique([diceRollerId, indexInRoller])
 }
