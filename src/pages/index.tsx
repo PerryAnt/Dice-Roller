@@ -1,7 +1,5 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
-import { ApiError } from "next/dist/server/api-utils";
 import Head from "next/head";
-import Link from "next/link";
 import { useState } from "react";
 import Roller from "~/components/Roller";
 import type { diceGroupType, rollerType } from "~/components/typeDefs";
@@ -13,12 +11,9 @@ export default function Home() {
   const [rollerList, setRollerList] = useState<rollerType[]>([dummyRoller()]);
   const [haveRollersChanged, setHaveRollersChanged] = useState<boolean>(false);
 
-  const { data: rollers, refetch } = api.example.loadUserData.useQuery(
-    undefined,
-    {
-      enabled: false,
-    }
-  );
+  const { refetch } = api.example.loadUserData.useQuery(undefined, {
+    enabled: false,
+  });
 
   const { mutate: saveData } = api.example.saveUserData.useMutation();
 
@@ -89,7 +84,7 @@ export default function Home() {
           <br></br>
           <button
             className=""
-            onClick={(e) => {
+            onClick={() => {
               loadFromDatabase().catch(() => {
                 console.log("load failed");
               });
@@ -98,7 +93,7 @@ export default function Home() {
             Load
           </button>
           <br></br>
-          <button className="" onClick={(e) => saveToDatabase()}>
+          <button className="" onClick={() => saveToDatabase()}>
             Save
           </button>
         </div>
@@ -109,7 +104,7 @@ export default function Home() {
           >
             <button
               className="absolute right-0 top-0 m-2"
-              onClick={(e) => removeRoller(index)}
+              onClick={() => removeRoller(index)}
             >
               X
             </button>

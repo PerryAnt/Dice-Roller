@@ -139,9 +139,7 @@ function Roller(props: Props) {
         <Dice
           key={index}
           state={value}
-          remove={(e: React.MouseEvent<HTMLButtonElement>) =>
-            removeDiceGroup(index)
-          }
+          remove={() => removeDiceGroup(index)}
           hover={index == hover}
           setState={handleGroupChange(index)}
         ></Dice>
@@ -179,7 +177,7 @@ function Roller(props: Props) {
           <button
             type="button"
             className="btn btn-blue m-2"
-            onClick={(e) => rollDice()}
+            onClick={() => rollDice()}
           >
             Roll
           </button>

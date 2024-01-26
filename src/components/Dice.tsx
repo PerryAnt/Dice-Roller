@@ -2,7 +2,7 @@ import type { diceGroupType } from "./typeDefs";
 
 interface Props {
   state: diceGroupType;
-  remove: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  remove: () => void;
   hover: boolean;
   setState: (value: diceGroupType) => void;
 }
