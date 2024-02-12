@@ -1,5 +1,6 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
+import Link from "next/link";
 import { useState } from "react";
 import Roller from "~/components/Roller";
 import type { diceGroupType, rollerType } from "~/components/typeDefs";
@@ -96,6 +97,8 @@ export default function Home() {
           <button className="" onClick={() => saveToDatabase()}>
             Save
           </button>
+          <br></br>
+          <Link href="/new/page">New</Link>
         </div>
         {rollerList.map((value, index) => (
           <div
