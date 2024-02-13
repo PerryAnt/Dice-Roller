@@ -97,8 +97,6 @@ export default function Home() {
           <button className="" onClick={() => saveToDatabase()}>
             Save
           </button>
-          <br></br>
-          <Link href="/new/page">New</Link>
         </div>
         {rollerList.map((value, index) => (
           <div
