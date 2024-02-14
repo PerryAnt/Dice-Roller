@@ -54,26 +54,31 @@ function Dice(props: Props) {
   }
 
   return (
-    <div className={"padding-2 flex flex-row items-center gap-2" + background}>
+    <div
+      className={
+        "flex flex-row items-center justify-between gap-2" + background
+      }
+    >
       <button onClick={props.remove}>x</button>
-      <div>{props.hover}</div>
-      <input
-        className={"w-10 text-right " + background}
-        type="text"
-        onChange={(e) => handleDiceChange(e.target.value)}
-        value={props.state.isPositive ? props.state.dice : -props.state.dice}
-      />
-      <div className="m-2">d</div>
-      <input
-        className={"w-10" + background}
-        type="text"
-        onChange={(e) => handleSidesChange(e.target.value)}
-        value={props.state.sides}
-      />
+      <div className="flex  w-1/5 flex-row">
+        <input
+          className={"w-2/5 text-right " + background}
+          type="text"
+          onChange={(e) => handleDiceChange(e.target.value)}
+          value={props.state.isPositive ? props.state.dice : -props.state.dice}
+        />
+        <div className="">d</div>
+        <input
+          className={"w-2/5" + background}
+          type="text"
+          onChange={(e) => handleSidesChange(e.target.value)}
+          value={props.state.sides}
+        />
+      </div>
       <select
         name="option"
         id="option"
-        className="w-40"
+        className="w-1/2"
         onChange={(e) => handleOptionChange(e.target.value)}
         value={props.state.option}
       >
@@ -83,21 +88,22 @@ function Dice(props: Props) {
           </option>
         ))}
       </select>
-      <div className="m-2">X =</div>
-      <input
-        className={"w-4 " + background}
-        type="text"
-        onChange={(e) => handleXChange(e.target.value)}
-        value={props.state.X}
-      />
-      <label className="m-2">
+      <div className="flex  flex-row justify-between">
+        <div className="whitespace-nowrap">X =</div>
         <input
-          className="m-2"
+          className={"w-4 " + background}
+          type="text"
+          onChange={(e) => handleXChange(e.target.value)}
+          value={props.state.X}
+        />
+      </div>
+      <label className="flex flex-row gap-2 whitespace-nowrap">
+        <input
           type="checkbox"
           checked={props.state.doubleOnCrit}
           onChange={handleCritChange}
         />
-        Double on Crit
+        <div>Double on Crit</div>
       </label>
     </div>
   );

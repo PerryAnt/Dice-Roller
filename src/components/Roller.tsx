@@ -129,7 +129,7 @@ function Roller(props: Props) {
   }
 
   return (
-    <div className="m-2">
+    <div className="p-2">
       <input
         type="text"
         onChange={(e) => handleLabelChange(e.target.value)}

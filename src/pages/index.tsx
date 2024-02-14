@@ -100,10 +100,10 @@ export default function Home() {
         {rollerList.map((value, index) => (
           <div
             key={index}
-            className="relative justify-between border border-black"
+            className="relative w-3/4 justify-between border border-black"
           >
             <button
-              className="absolute right-0 top-0 m-2"
+              className="absolute right-0 top-0 p-2"
               onClick={() => removeRoller(index)}
             >
               X
