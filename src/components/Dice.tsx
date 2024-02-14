@@ -19,6 +19,13 @@ function Dice(props: Props) {
     const value = parseInt(newDice) || 0;
     const newState = { ...props.state };
 
+    if (newDice.charAt(0) == "0") {
+      newState.dice = value;
+      newState.isPositive = false;
+      props.setState(newState);
+      return;
+    }
+
     if (value >= 0) {
       newState.dice = value;
       newState.isPositive = true;
