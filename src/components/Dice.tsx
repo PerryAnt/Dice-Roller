@@ -78,7 +78,7 @@ function Dice(props: Props) {
       <select
         name="option"
         id="option"
-        className="w-1/2"
+        className="w-1/3"
         onChange={(e) => handleOptionChange(e.target.value)}
         value={props.state.option}
       >

@@ -100,7 +100,7 @@ export default function Home() {
         {rollerList.map((value, index) => (
           <div
             key={index}
-            className="relative w-3/4 justify-between border border-black text-xs md:text-base"
+            className="relative w-5/6 justify-between border border-black text-xs md:w-3/4 md:text-base"
           >
             <button
               className="absolute right-0 top-0 p-2"
