@@ -10,7 +10,7 @@ export default function Home() {
   const user = useUser();
 
   const [rollerList, setRollerList] = useState<rollerType[]>([dummyRoller()]);
-  const [haveRollersChanged, setHaveRollersChanged] = useState<boolean>(false);
+  const [haveRollersChanged, setHaveRollersChanged] = useState<boolean>(true);
 
   const { refetch } = api.example.loadUserData.useQuery(undefined, {
     enabled: false,
@@ -80,8 +80,7 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center gap-2">
         <div className="absolute right-0 top-0">
-          {!user.isSignedIn && <SignInButton />}
-          {user.isSignedIn && <SignOutButton />}
+          {user.isSignedIn ? <SignOutButton /> : <SignInButton />}
           <br></br>
           <button
             className=""
