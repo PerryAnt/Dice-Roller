@@ -65,8 +65,7 @@ function Dice(props: Props) {
         <div className="flex flex-row">
           <input
             className={"w-2/5 text-right " + background}
-            type="text"
-            inputMode="numeric"
+            type="number"
             onChange={(e) => handleDiceChange(e.target.value)}
             onFocus={(e) => e.target.select()}
             value={
