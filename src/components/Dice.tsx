@@ -88,7 +88,7 @@ function Dice(props: Props) {
           </option>
         ))}
       </select>
-      <div className="flex  flex-row justify-between">
+      <div className="flex flex-row justify-between">
         <div className="whitespace-nowrap">X =</div>
         <input
           className={"w-4 " + background}
