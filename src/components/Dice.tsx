@@ -1,4 +1,5 @@
 import type { diceGroupType } from "./typeDefs";
+import { useState } from "react";
 
 interface Props {
   state: diceGroupType;
@@ -7,8 +8,12 @@ interface Props {
   setState: (value: diceGroupType) => void;
 }
 
+type visibility = "visible" | "invisible";
+
 function Dice(props: Props) {
   const background = props.hover ? "bg-green-500" : "";
+
+  const [nVisibility, setNVisibility] = useState<visibility>("invisible");
 
   function handleDiceChange(newDice: string) {
     const value = parseInt(newDice) || 0;
@@ -60,8 +65,9 @@ function Dice(props: Props) {
         <div className="flex flex-row">
           <input
             className={"w-2/5 text-right " + background}
-            type="number"
+            type="numeric"
             onChange={(e) => handleDiceChange(e.target.value)}
+            onFocus={(e) => e.target.select()}
             value={
               props.state.isPositive ? props.state.dice : -props.state.dice
             }
@@ -71,6 +77,7 @@ function Dice(props: Props) {
             className={"w-2/5" + background}
             type="number"
             onChange={(e) => handleSidesChange(e.target.value)}
+            onFocus={(e) => e.target.select()}
             value={props.state.sides}
           />
         </div>
@@ -104,8 +111,9 @@ function Dice(props: Props) {
           <div className="whitespace-nowrap">N =</div>
           <input
             className={"w-4" + background}
-            type="text"
+            type="number"
             onChange={(e) => handleXChange(e.target.value)}
+            onFocus={(e) => e.target.select()}
             value={props.state.X}
           />
         </div>
