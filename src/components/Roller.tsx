@@ -109,16 +109,16 @@ function Roller(props: Props) {
       case "none":
         result = [...rawResult];
         break;
-      case "keepTopX":
+      case "keepTopN":
         result = rawResult.slice(-x);
         break;
-      case "keepBottomX":
+      case "keepBottomN":
         result = rawResult.slice(0, x);
         break;
-      case "discardTopX":
+      case "discardTopN":
         result = rawResult.slice(0, -x);
         break;
-      case "discardBottomX":
+      case "discardBottomN":
         result = rawResult.slice(x);
         break;
       default:
@@ -135,6 +135,7 @@ function Roller(props: Props) {
         onChange={(e) => handleLabelChange(e.target.value)}
         value={props.roller.label}
       />
+      <br /> <br />
       {groupList.map((value, index) => (
         <Dice
           key={index}
@@ -149,7 +150,6 @@ function Roller(props: Props) {
           +
         </button>
       )}
-
       <div className="flex flex-row justify-between">
         <div className="m-2 flex flex-row justify-between">
           {resultList.map((group, groupIndex) => (
@@ -174,11 +174,7 @@ function Roller(props: Props) {
             />
             Crit
           </label>
-          <button
-            type="button"
-            className="btn btn-blue m-2"
-            onClick={() => rollDice()}
-          >
+          <button type="button" className="m-2" onClick={() => rollDice()}>
             Roll
           </button>
         </div>

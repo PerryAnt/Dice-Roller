@@ -54,78 +54,92 @@ function Dice(props: Props) {
   }
 
   return (
-    <div
-      className={
-        "flex flex-row items-center justify-between gap-2" + background
-      }
-    >
+    <div>
       <button onClick={props.remove}>x</button>
-      <div className="flex  w-1/5 flex-row">
-        <input
-          className={"w-2/5 text-right " + background}
-          type="text"
-          onChange={(e) => handleDiceChange(e.target.value)}
-          value={props.state.isPositive ? props.state.dice : -props.state.dice}
-        />
-        <div className="">d</div>
-        <input
-          className={"w-2/5" + background}
-          type="text"
-          onChange={(e) => handleSidesChange(e.target.value)}
-          value={props.state.sides}
-        />
+      <div className={"flex flex-row" + background}>
+        <div className="flex flex-row">
+          <input
+            className={"w-2/5 text-right " + background}
+            type="number"
+            onChange={(e) => handleDiceChange(e.target.value)}
+            value={
+              props.state.isPositive ? props.state.dice : -props.state.dice
+            }
+          />
+          <div className="">d</div>
+          <input
+            className={"w-2/5" + background}
+            type="number"
+            onChange={(e) => handleSidesChange(e.target.value)}
+            value={props.state.sides}
+          />
+        </div>
+        <label className="flex flex-row gap-2 whitespace-nowrap">
+          <input
+            type="checkbox"
+            checked={props.state.doubleOnCrit}
+            onChange={handleCritChange}
+          />
+          <div>Double on Crit</div>
+        </label>
       </div>
-      <select
-        name="option"
-        id="option"
-        className="w-1/3"
-        onChange={(e) => handleOptionChange(e.target.value)}
-        value={props.state.option}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value} title={option.title}>
-            {option.text}
-          </option>
-        ))}
-      </select>
-      <div className="flex flex-row justify-between">
-        <div className="whitespace-nowrap">X =</div>
-        <input
-          className={"w-4 " + background}
-          type="text"
-          onChange={(e) => handleXChange(e.target.value)}
-          value={props.state.X}
-        />
+      <div className={"flex flex-row items-center justify-around" + background}>
+        <select
+          name="option"
+          id="option"
+          onChange={(e) => handleOptionChange(e.target.value)}
+          value={props.state.option}
+        >
+          {options.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+              title={option.title}
+            >
+              {option.text}
+            </option>
+          ))}
+        </select>
+        <div className="flex flex-row">
+          <div className="whitespace-nowrap">N =</div>
+          <input
+            className={"w-4" + background}
+            type="text"
+            onChange={(e) => handleXChange(e.target.value)}
+            value={props.state.X}
+          />
+        </div>
       </div>
-      <label className="flex flex-row gap-2 whitespace-nowrap">
-        <input
-          type="checkbox"
-          checked={props.state.doubleOnCrit}
-          onChange={handleCritChange}
-        />
-        <div>Double on Crit</div>
-      </label>
+      <br />
     </div>
   );
 }
 
 const options = [
-  { value: "none", title: "", text: "" },
-  { value: "keepTopX", title: "Keep X highest dice rolled", text: "X Highest" },
   {
-    value: "keepBottomX",
-    title: "Keep X lowest dice rolled",
-    text: "X Lowest",
+    value: "none",
+    title: "",
+    text: "",
   },
   {
-    value: "discardTopX",
-    title: "Discard X highest dice rolled",
-    text: "Discard X Highest",
+    value: "keepTopN",
+    title: "Keep N highest dice rolled",
+    text: "N Highest",
   },
   {
-    value: "discardBottomX",
-    title: "Discard X lowest dice rolled",
-    text: "Discard X Lowest",
+    value: "keepBottomN",
+    title: "Keep N lowest dice rolled",
+    text: "N Lowest",
+  },
+  {
+    value: "discardTopN",
+    title: "Discard N highest dice rolled",
+    text: "Discard N Highest",
+  },
+  {
+    value: "discardBottomN",
+    title: "Discard N lowest dice rolled",
+    text: "Discard N Lowest",
   },
   {
     value: "rerollMax",
