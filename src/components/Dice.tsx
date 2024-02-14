@@ -54,10 +54,8 @@ function Dice(props: Props) {
   }
 
   return (
-    <div className={"flex flex-row items-center gap-2 " + background}>
-      <button className="m-2" onClick={props.remove}>
-        x
-      </button>
+    <div className={"padding-2 flex flex-row items-center gap-2" + background}>
+      <button onClick={props.remove}>x</button>
       <div>{props.hover}</div>
       <input
         className={"w-10 text-right " + background}
@@ -75,19 +73,19 @@ function Dice(props: Props) {
       <select
         name="option"
         id="option"
+        className="w-40"
         onChange={(e) => handleOptionChange(e.target.value)}
         value={props.state.option}
       >
-        <option value="none"></option>
-        <option value="keepTopX">Keep Highest X Values</option>
-        <option value="keepBottomX">Keep Lowest X Values</option>
-        <option value="discardTopX">Discard Highest X Values</option>
-        <option value="discardBottomX">Discard Lowest X Values</option>
-        <option value="rerollMax">Reroll Maximum Valued Dice</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value} title={option.title}>
+            {option.text}
+          </option>
+        ))}
       </select>
       <div className="m-2">X =</div>
       <input
-        className={"w-10 " + background}
+        className={"w-4 " + background}
         type="text"
         onChange={(e) => handleXChange(e.target.value)}
         value={props.state.X}
@@ -105,4 +103,28 @@ function Dice(props: Props) {
   );
 }
 
+const options = [
+  { value: "none", title: "", text: "" },
+  { value: "keepTopX", title: "Keep X highest dice rolled", text: "X Highest" },
+  {
+    value: "keepBottomX",
+    title: "Keep X lowest dice rolled",
+    text: "X Lowest",
+  },
+  {
+    value: "discardTopX",
+    title: "Discard X highest dice rolled",
+    text: "Discard X Highest",
+  },
+  {
+    value: "discardBottomX",
+    title: "Discard X lowest dice rolled",
+    text: "Discard X Lowest",
+  },
+  {
+    value: "rerollMax",
+    title: "Roll additional die when maximum value is rolled ",
+    text: "Exploding",
+  },
+];
 export default Dice;
