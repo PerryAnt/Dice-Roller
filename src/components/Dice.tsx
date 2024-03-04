@@ -1,5 +1,4 @@
 import type { diceGroupType } from "./typeDefs";
-import { useState } from "react";
 
 interface Props {
   state: diceGroupType;
@@ -8,12 +7,8 @@ interface Props {
   setState: (value: diceGroupType) => void;
 }
 
-type visibility = "visible" | "invisible";
-
 function Dice(props: Props) {
   const background = props.hover ? "bg-green-500" : "";
-
-  const [nVisibility, setNVisibility] = useState<visibility>("invisible");
 
   function handleDiceChange(newDice: string) {
     const value = parseInt(newDice) || 0;
@@ -114,10 +109,15 @@ function Dice(props: Props) {
             </option>
           ))}
         </select>
-        <div className="flex flex-row">
+        <div
+          className={
+            "flex flex-row " +
+            (props.state.option.includes("N") ? "visible" : "invisible")
+          }
+        >
           <div className="whitespace-nowrap">N =</div>
           <input
-            className={"w-4" + background}
+            className={"w-8" + background}
             type="number"
             onChange={(e) => handleXChange(e.target.value)}
             onFocus={(e) => e.target.select()}
